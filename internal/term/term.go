@@ -1,3 +1,5 @@
+//go:build linux || darwin
+
 package term
 
 import (
@@ -93,26 +95,4 @@ func getTermSize() (int, int) {
 		return 0, 0
 	}
 	return int(ws.Col), int(ws.Row)
-}
-
-func tcgetattr(fd int, termios *syscall.Termios) error {
-	_, _, errno := syscall.Syscall(syscall.SYS_IOCTL,
-		uintptr(fd),
-		uintptr(syscall.TCGETS),
-		uintptr(unsafe.Pointer(termios)))
-	if errno != 0 {
-		return errno
-	}
-	return nil
-}
-
-func tcsetattr(fd int, termios *syscall.Termios) error {
-	_, _, errno := syscall.Syscall(syscall.SYS_IOCTL,
-		uintptr(fd),
-		uintptr(syscall.TCSETS),
-		uintptr(unsafe.Pointer(termios)))
-	if errno != 0 {
-		return errno
-	}
-	return nil
 }
